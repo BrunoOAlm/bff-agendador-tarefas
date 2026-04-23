@@ -2,6 +2,7 @@ package com.bruno.bff_agendadortarefas.controller;
 
 
 import com.bruno.bff_agendadortarefas.infrastructure.exceptions.ConflictException;
+import com.bruno.bff_agendadortarefas.infrastructure.exceptions.IllegalArgumentException;
 import com.bruno.bff_agendadortarefas.infrastructure.exceptions.ResourceNotFoundException;
 import com.bruno.bff_agendadortarefas.infrastructure.exceptions.UnauthorizedException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex){
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+    }
 
 
 }

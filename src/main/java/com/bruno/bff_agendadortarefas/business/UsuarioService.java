@@ -7,6 +7,7 @@ import com.bruno.bff_agendadortarefas.business.dto.in.UsuarioDTORequest;
 import com.bruno.bff_agendadortarefas.business.dto.out.EnderecoDTOResponse;
 import com.bruno.bff_agendadortarefas.business.dto.out.TelefoneDTOResponse;
 import com.bruno.bff_agendadortarefas.business.dto.out.UsuarioDTOResponse;
+import com.bruno.bff_agendadortarefas.business.dto.out.ViaCepDTOResponse;
 import com.bruno.bff_agendadortarefas.infrastructure.client.UsuarioClient;
 
 
@@ -63,6 +64,10 @@ public class UsuarioService {
     public TelefoneDTOResponse cadastraTelefone (String token, TelefoneDTORequest dto){
             return client.cadastraTelefone(dto,token);
 
+    }
+
+    public ViaCepDTOResponse buscarEnderecoPorCep(String cep){
+        return client.buscarDadosCep(cep);
     }
 
 }
