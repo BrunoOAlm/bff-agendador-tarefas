@@ -10,7 +10,6 @@ import com.bruno.bff_agendadortarefas.business.dto.out.TelefoneDTOResponse;
 import com.bruno.bff_agendadortarefas.business.dto.out.UsuarioDTOResponse;
 import com.bruno.bff_agendadortarefas.business.dto.out.ViaCepDTOResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
