@@ -1,10 +1,7 @@
 package com.bruno.bff_agendadortarefas.infrastructure.client.config;
 
-import com.bruno.bff_agendadortarefas.infrastructure.exceptions.BusinessException;
-import com.bruno.bff_agendadortarefas.infrastructure.exceptions.ConflictException;
+import com.bruno.bff_agendadortarefas.infrastructure.exceptions.*;
 import com.bruno.bff_agendadortarefas.infrastructure.exceptions.IllegalArgumentException;
-import com.bruno.bff_agendadortarefas.infrastructure.exceptions.ResourceNotFoundException;
-import com.bruno.bff_agendadortarefas.infrastructure.exceptions.UnauthorizedException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 
@@ -13,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class FeignError implements ErrorDecoder {
+    private static final String PREFIXO_ERRO = "Erro: ";
 
     @Override
     public Exception decode(String s, Response response) {
@@ -20,31 +18,29 @@ public class FeignError implements ErrorDecoder {
         String mensagemErro = mensagemErro(response);
 
 
-
-        switch(response.status()){
+        switch (response.status()) {
             case 409:
-                return new ConflictException("Erro: " + mensagemErro);
+                return new ConflictException(PREFIXO_ERRO + mensagemErro);
             case 403:
-                return new ResourceNotFoundException("Erro: " + mensagemErro);
+                return new ResourceNotFoundException(PREFIXO_ERRO + mensagemErro);
             case 401:
-                return new UnauthorizedException("Erro: " + mensagemErro);
-
+                return new UnauthorizedException(PREFIXO_ERRO + mensagemErro);
             case 400:
-                return new IllegalArgumentException("Erro: " + mensagemErro);
-
-            default: return new BusinessException("Erro: " + mensagemErro);
+                return new IllegalArgumentException(PREFIXO_ERRO + mensagemErro);
+            default:
+                return new BusinessException(PREFIXO_ERRO + mensagemErro);
         }
     }
 
-    private String mensagemErro(Response response){
+    private String mensagemErro(Response response) {
 
         try {
-            if(Objects.isNull(response.body())){
+            if (Objects.isNull(response.body())) {
                 return "";
             }
-           return new String(response.body().asInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            return new String(response.body().asInputStream().readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FeignErrorException("Erro ao ler resposta do Feign", e);
         }
     }
 }
